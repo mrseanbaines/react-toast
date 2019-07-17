@@ -4,6 +4,8 @@
   "description": "React toast notification",
   "main": "index.js",
   "scripts": {
+    "start": "babel src --out-dir lib --watch",
+    "build": "babel src --out-dir lib --minified",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,5 +22,17 @@
   "bugs": {
     "url": "https://github.com/mrseanbaines/react-toast/issues"
   },
-  "homepage": "https://github.com/mrseanbaines/react-toast#readme"
+  "homepage": "https://github.com/mrseanbaines/react-toast#readme",
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/preset-react": "^7.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
 }

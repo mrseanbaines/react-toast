@@ -1,0 +1,8 @@
+# Dependency directory
+node_modules
+
+# Build folder
+lib
+
+# Misc
+.DS_Store
