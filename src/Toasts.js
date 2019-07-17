@@ -27,7 +27,7 @@ export default class extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.el = document.createDocumentFragment();
+    this.el = document.createElement('div');
   }
 
   componentDidMount = () => {
@@ -44,7 +44,7 @@ export default class extends PureComponent {
     return ReactDOM.createPortal(
       <Container>
         {toasts.map((toast, i) => (
-          <Toast key={i}>{toast}</Toast>
+          <Toast key={i}>{toast.text}</Toast>
         ))}
       </Container>,
       this.el

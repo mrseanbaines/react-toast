@@ -5,8 +5,8 @@ import ToastConsumer from './ToastConsumer';
 
 export { default as withToast } from './withToast';
 
-export default ({ children }) => (
-  <ToastProvider>
+export default ({ children, ...props }) => (
+  <ToastProvider {...props}>
     <ToastConsumer>
       {children}
       <Toasts />

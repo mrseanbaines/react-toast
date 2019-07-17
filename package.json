@@ -37,6 +37,7 @@
     "react-dom": "^16.8.6"
   },
   "dependencies": {
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "uuid": "^3.3.2"
   }
 }

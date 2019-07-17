@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Provider } from './ToastContext';
+import uuidv4 from 'uuid/v4';
+import { delay } from './utils';
 
-export default class extends PureComponent {
+class ToastProvider extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -10,9 +12,20 @@ export default class extends PureComponent {
     };
   }
 
-  addToast = newToast => {
+  addToast = text => {
+    const { toastLifeTime } = this.props;
+    const id = uuidv4();
+
     this.setState(prevState => ({
-      toasts: [...prevState.toasts, newToast],
+      toasts: [...prevState.toasts, { id, text }],
+    }));
+
+    delay(() => this.removeToast(id), toastLifeTime);
+  };
+
+  removeToast = id => {
+    this.setState(prevState => ({
+      toasts: prevState.toasts.filter(toast => toast.id !== id),
     }));
   };
 
@@ -26,3 +39,9 @@ export default class extends PureComponent {
     );
   }
 }
+
+ToastProvider.defaultProps = {
+  toastLifeTime: 3000,
+};
+
+export default ToastProvider;
