@@ -41,13 +41,14 @@ export default class extends PureComponent {
   render = () => {
     const { toasts } = this.props;
 
-    return ReactDOM.createPortal(
+    const component = (
       <Container>
         {toasts.map((toast, i) => (
           <Toast key={i}>{toast.text}</Toast>
         ))}
-      </Container>,
-      this.el
+      </Container>
     );
+
+    return ReactDOM.createPortal(component, this.el);
   };
 }
