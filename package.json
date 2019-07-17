@@ -1,0 +1,24 @@
+{
+  "name": "react-toast",
+  "version": "0.0.0",
+  "description": "React toast notification",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrseanbaines/react-toast.git"
+  },
+  "keywords": [
+    "React",
+    "toast",
+    "notification"
+  ],
+  "author": "Sean Baines",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrseanbaines/react-toast/issues"
+  },
+  "homepage": "https://github.com/mrseanbaines/react-toast#readme"
+}
