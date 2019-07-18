@@ -13,15 +13,15 @@ class ToastProvider extends PureComponent {
   }
 
   addToast = text => {
-    const { toastLifeTime, preventAutoDismiss } = this.props;
+    const { autoDismissTimeout, preventAutoDismiss } = this.props;
     const id = uuidv4();
 
     this.setState(prevState => ({
-      toasts: [...prevState.toasts, { id, text }],
+      toasts: [{ id, text }, ...prevState.toasts],
     }));
 
     if (!preventAutoDismiss) {
-      delay(() => this.removeToast(id), toastLifeTime);
+      delay(() => this.removeToast(id), autoDismissTimeout);
     }
   };
 
@@ -43,7 +43,7 @@ class ToastProvider extends PureComponent {
 }
 
 ToastProvider.defaultProps = {
-  toastLifeTime: 3000,
+  autoDismissTimeout: 3000,
   preventAutoDismiss: false,
 };
 
