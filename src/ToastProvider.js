@@ -35,7 +35,13 @@ class ToastProvider extends PureComponent {
     const { children } = this.props;
 
     return (
-      <Provider value={{ ...this.state, addToast: this.addToast }}>
+      <Provider
+        value={{
+          ...this.state,
+          addToast: this.addToast,
+          dismissToast: this.removeToast,
+        }}
+      >
         {children}
       </Provider>
     );
@@ -45,6 +51,7 @@ class ToastProvider extends PureComponent {
 ToastProvider.defaultProps = {
   autoDismissTimeout: 3000,
   preventAutoDismiss: false,
+  dismissible: false,
 };
 
 export default ToastProvider;

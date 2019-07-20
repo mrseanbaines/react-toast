@@ -5,11 +5,11 @@ import ToastConsumer from './ToastConsumer';
 
 export { default as withToast } from './withToast';
 
-export default ({ children, ...props }) => (
+export default ({ children, dismissible, ...props }) => (
   <ToastProvider {...props}>
     <ToastConsumer>
       {children}
-      <Toasts />
+      <Toasts dismissible={dismissible} />
     </ToastConsumer>
   </ToastProvider>
 );

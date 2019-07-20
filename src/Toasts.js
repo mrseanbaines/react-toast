@@ -27,14 +27,18 @@ export default class extends PureComponent {
   };
 
   render = () => {
-    const { toasts } = this.props;
+    const { toasts, dismissible, dismissToast } = this.props;
 
     const component = (
       <Container>
         <TransitionGroup component={null}>
           {toasts.map(({ text, id }) => (
             <CSSTransition key={id} timeout={300} classNames="item">
-              <Toast toastText={text} />
+              <Toast
+                toastText={text}
+                dismissible={dismissible}
+                dismissToast={() => dismissToast(id)}
+              />
             </CSSTransition>
           ))}
         </TransitionGroup>
