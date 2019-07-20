@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled, { css } from 'styled-components';
 
 const dismissibleStyles = css`
@@ -76,16 +76,16 @@ const StyledToast = styled.div`
   background: ${({ type }) => toastStyle(type)};
 `;
 
-const Toast = ({ toastText, dismissible, dismissToast, type }) => (
+const Toast = memo(({ text, dismissible, dismissToast, type }) => (
   <StyledToast dismissible={dismissible} type={type}>
-    <div>{toastText}</div>
+    <div>{text}</div>
     {dismissible && (
       <CloseBtn onClick={dismissToast}>
         <div>&times;</div>
       </CloseBtn>
     )}
   </StyledToast>
-);
+));
 
 Toast.defaultProps = {
   type: 'INFO',

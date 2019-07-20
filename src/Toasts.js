@@ -41,39 +41,45 @@ class Toasts extends PureComponent {
     const { autoDismissTimeout, preventAutoDismiss } = this.props;
     const id = uuidv4();
 
+    const newToast = {
+      id,
+      text,
+      autoDismissTimeout,
+      preventAutoDismiss,
+      ...options,
+    };
+    console.log(newToast);
+
     this.setState(prevState => ({
-      toasts: [{ id, text, ...options }, ...prevState.toasts],
+      toasts: [newToast, ...prevState.toasts],
     }));
 
-    if (!(options.preventAutoDismiss || preventAutoDismiss)) {
-      delay(
-        () => this.removeToast(id),
-        options.autoDismissTimeout || autoDismissTimeout
-      );
+    if (!newToast.preventAutoDismiss) {
+      delay(() => this.dismissToast(id), newToast.autoDismissTimeout);
     }
   };
 
-  removeToast = id => {
+  dismissToast = id => {
     this.setState(prevState => ({
       toasts: prevState.toasts.filter(toast => toast.id !== id),
     }));
   };
 
   render = () => {
-    const { dismissible, children } = this.props;
+    const { dismissible, children, renderToast, type } = this.props;
     const { toasts } = this.state;
 
     const component = (
       <Container>
         <TransitionGroup component={null}>
-          {toasts.map(({ text, id, ...options }) => (
-            <CSSTransition key={id} timeout={300} classNames="item">
-              <Toast
-                toastText={text}
-                dismissible={dismissible}
-                dismissToast={() => this.removeToast(id)}
-                {...options}
-              />
+          {toasts.map(toast => (
+            <CSSTransition key={toast.id} timeout={300} classNames="item">
+              {renderToast({
+                type,
+                dismissible,
+                dismissToast: () => this.dismissToast(toast.id),
+                ...toast,
+              })}
             </CSSTransition>
           ))}
         </TransitionGroup>
@@ -88,7 +94,7 @@ class Toasts extends PureComponent {
           value={{
             ...this.state,
             addToast: this.addToast,
-            dismissToast: this.removeToast,
+            dismissToast: this.dismissToast,
           }}
         >
           {children}
@@ -102,6 +108,8 @@ Toasts.defaultProps = {
   autoDismissTimeout: 3000,
   preventAutoDismiss: false,
   dismissible: false,
+  renderToast: props => <Toast {...props} />,
+  type: 'INFO',
 };
 
 export default Toasts;
