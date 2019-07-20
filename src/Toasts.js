@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import uuidv4 from 'uuid/v4';
 import Toast from './Toast';
+import { Provider } from './ToastContext';
+import { delay } from './utils';
 
 const Container = styled.div`
   position: fixed;
@@ -15,9 +18,13 @@ const Container = styled.div`
   align-items: flex-end;
 `;
 
-export default class extends PureComponent {
+class Toasts extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      toasts: [],
+    };
 
     this.el = document.createElement('div');
   }
@@ -30,8 +37,28 @@ export default class extends PureComponent {
     document.body.removeChild(this.el);
   };
 
+  addToast = text => {
+    const { autoDismissTimeout, preventAutoDismiss } = this.props;
+    const id = uuidv4();
+
+    this.setState(prevState => ({
+      toasts: [{ id, text }, ...prevState.toasts],
+    }));
+
+    if (!preventAutoDismiss) {
+      delay(() => this.removeToast(id), autoDismissTimeout);
+    }
+  };
+
+  removeToast = id => {
+    this.setState(prevState => ({
+      toasts: prevState.toasts.filter(toast => toast.id !== id),
+    }));
+  };
+
   render = () => {
-    const { toasts, dismissible, dismissToast } = this.props;
+    const { dismissible, children } = this.props;
+    const { toasts } = this.state;
 
     const component = (
       <Container>
@@ -41,7 +68,7 @@ export default class extends PureComponent {
               <Toast
                 toastText={text}
                 dismissible={dismissible}
-                dismissToast={() => dismissToast(id)}
+                dismissToast={() => this.removeToast(id)}
               />
             </CSSTransition>
           ))}
@@ -49,6 +76,28 @@ export default class extends PureComponent {
       </Container>
     );
 
-    return ReactDOM.createPortal(component, this.el);
+    return (
+      <>
+        {ReactDOM.createPortal(component, this.el)}
+
+        <Provider
+          value={{
+            ...this.state,
+            addToast: this.addToast,
+            dismissToast: this.removeToast,
+          }}
+        >
+          {children}
+        </Provider>
+      </>
+    );
   };
 }
+
+Toasts.defaultProps = {
+  autoDismissTimeout: 3000,
+  preventAutoDismiss: false,
+  dismissible: false,
+};
+
+export default Toasts;

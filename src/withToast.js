@@ -1,8 +1,8 @@
 import React from 'react';
-import ToastConsumer from './ToastConsumer';
+import { Consumer } from './ToastContext';
 
 export default Component => props => (
-  <ToastConsumer>
-    <Component {...props} />
-  </ToastConsumer>
+  <Consumer>
+    {toastContext => <Component {...props} {...toastContext} />}
+  </Consumer>
 );
