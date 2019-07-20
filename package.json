@@ -1,12 +1,13 @@
 {
-  "name": "react-toast",
+  "name": "@mrseanbaines/react-toast",
   "version": "0.0.0",
   "description": "React toast notification",
   "main": "index.js",
   "scripts": {
     "start": "babel src --out-dir lib --watch",
     "build": "babel src --out-dir lib --minified",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
