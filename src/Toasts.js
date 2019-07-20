@@ -37,16 +37,19 @@ class Toasts extends PureComponent {
     document.body.removeChild(this.el);
   };
 
-  addToast = text => {
+  addToast = (text, options) => {
     const { autoDismissTimeout, preventAutoDismiss } = this.props;
     const id = uuidv4();
 
     this.setState(prevState => ({
-      toasts: [{ id, text }, ...prevState.toasts],
+      toasts: [{ id, text, ...options }, ...prevState.toasts],
     }));
 
-    if (!preventAutoDismiss) {
-      delay(() => this.removeToast(id), autoDismissTimeout);
+    if (!(options.preventAutoDismiss || preventAutoDismiss)) {
+      delay(
+        () => this.removeToast(id),
+        options.autoDismissTimeout || autoDismissTimeout
+      );
     }
   };
 
@@ -63,12 +66,13 @@ class Toasts extends PureComponent {
     const component = (
       <Container>
         <TransitionGroup component={null}>
-          {toasts.map(({ text, id }) => (
+          {toasts.map(({ text, id, ...options }) => (
             <CSSTransition key={id} timeout={300} classNames="item">
               <Toast
                 toastText={text}
                 dismissible={dismissible}
                 dismissToast={() => this.removeToast(id)}
+                {...options}
               />
             </CSSTransition>
           ))}

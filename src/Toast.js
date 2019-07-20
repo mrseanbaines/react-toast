@@ -5,6 +5,30 @@ const dismissibleStyles = css`
   padding-right: 3rem;
 `;
 
+const toastStyle = type => {
+  switch (type) {
+    case 'SUCCESS': {
+      return 'lightgreen';
+    }
+
+    case 'ERROR': {
+      return 'lightcoral';
+    }
+
+    case 'WARN': {
+      return 'tan';
+    }
+
+    case 'INFO': {
+      return 'lightgrey';
+    }
+
+    default: {
+      return 'transparent';
+    }
+  }
+};
+
 const CloseBtn = styled.button.attrs({ type: 'button' })`
   background: none;
   border: none;
@@ -20,9 +44,8 @@ const CloseBtn = styled.button.attrs({ type: 'button' })`
   line-height: inherit;
 `;
 
-const Toast = styled.div`
+const StyledToast = styled.div`
   margin: 0.5rem;
-  background: lightgreen;
   color: white;
   font-weight: 600;
   opacity: 1;
@@ -49,15 +72,23 @@ const Toast = styled.div`
     opacity: 0;
     transform: translateX(100%);
   }
+
+  background: ${({ type }) => toastStyle(type)};
 `;
 
-export default ({ toastText, dismissible, dismissToast }) => (
-  <Toast dismissible={dismissible}>
+const Toast = ({ toastText, dismissible, dismissToast, type }) => (
+  <StyledToast dismissible={dismissible} type={type}>
     <div>{toastText}</div>
     {dismissible && (
       <CloseBtn onClick={dismissToast}>
         <div>&times;</div>
       </CloseBtn>
     )}
-  </Toast>
+  </StyledToast>
 );
+
+Toast.defaultProps = {
+  type: 'INFO',
+};
+
+export default Toast;
