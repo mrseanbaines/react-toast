@@ -48,7 +48,6 @@ class Toasts extends PureComponent {
       preventAutoDismiss,
       ...options,
     };
-    console.log(newToast);
 
     this.setState(prevState => ({
       toasts: [newToast, ...prevState.toasts],
