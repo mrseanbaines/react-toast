@@ -21,7 +21,7 @@ const CloseBtn = styled.button.attrs({ type: 'button' })`
 `;
 
 const Toast = styled.div`
-  margin: 1rem;
+  margin: 0.5rem;
   background: lightgreen;
   color: white;
   font-weight: 600;

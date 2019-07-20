@@ -7,8 +7,12 @@ import Toast from './Toast';
 const Container = styled.div`
   position: fixed;
   max-width: calc(100% - 2rem);
+  padding: 0.5rem;
   bottom: 0;
   right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 `;
 
 export default class extends PureComponent {
