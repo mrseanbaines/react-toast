@@ -14,6 +14,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  pointer-events: none;
+
+  * {
+    pointer-events: auto;
+  }
 `;
 
 class Toasts extends PureComponent {
