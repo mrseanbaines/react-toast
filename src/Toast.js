@@ -58,6 +58,7 @@ const StyledToast = styled.div`
   line-height: 1rem;
   font-size: 1rem;
   background: ${({ type }) => toastStyle(type)};
+  position: relative;
   margin: 0.5rem 1rem;
 
   :first-child {
@@ -69,20 +70,6 @@ const StyledToast = styled.div`
   }
 
   ${({ dismissible }) => dismissible && dismissibleStyles};
-
-  &.item-exit,
-  &.item-enter-active,
-  &.item-enter-done {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  &.item-exit-active,
-  &.item-exit-done,
-  &.item-enter {
-    opacity: 0;
-    transform: translateX(100%);
-  }
 `;
 
 const Toast = memo(({ text, dismissible, dismissToast, type }) => (

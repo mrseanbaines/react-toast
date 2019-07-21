@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import uuidv4 from 'uuid/v4';
 import Toast from './Toast';
@@ -8,16 +8,39 @@ import { Provider } from './ToastContext';
 import { delay } from './utils';
 
 const Container = styled.div`
+  pointer-events: none;
   position: fixed;
-  bottom: 0;
-  right: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  pointer-events: none;
+
+  ${({ originY, originX }) => css`
+    align-items: ${originX === 'right' ? 'flex-end' : 'flex-start'};
+
+    ${originY}: 0;
+    ${originX}: 0;
+  `};
 
   * {
     pointer-events: auto;
+  }
+
+  transition: all 300ms cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  .item-exit,
+  .item-enter-active,
+  .item-enter-done {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .item-exit-active,
+  .item-exit-done,
+  .item-enter {
+    opacity: 0;
+
+    ${({ originX }) => css`
+      transform: translateX(${originX === 'right' ? '100%' : '-100%'});
+    `};
   }
 `;
 
@@ -41,7 +64,7 @@ class Toasts extends PureComponent {
   };
 
   addToast = (text, options) => {
-    const { autoDismissTimeout, preventAutoDismiss } = this.props;
+    const { autoDismissTimeout, preventAutoDismiss, originY } = this.props;
     const id = uuidv4();
 
     const newToast = {
@@ -52,9 +75,15 @@ class Toasts extends PureComponent {
       ...options,
     };
 
-    this.setState(prevState => ({
-      toasts: [newToast, ...prevState.toasts],
-    }));
+    if (originY === 'bottom') {
+      this.setState({
+        toasts: [newToast, ...this.state.toasts],
+      });
+    } else {
+      this.setState({
+        toasts: [...this.state.toasts, newToast],
+      });
+    }
 
     if (!newToast.preventAutoDismiss) {
       delay(() => this.dismissToast(id), newToast.autoDismissTimeout);
@@ -68,11 +97,18 @@ class Toasts extends PureComponent {
   };
 
   render = () => {
-    const { dismissible, children, renderToast, type } = this.props;
+    const {
+      dismissible,
+      children,
+      renderToast,
+      type,
+      originY,
+      originX,
+    } = this.props;
     const { toasts } = this.state;
 
     const component = (
-      <Container>
+      <Container originY={originY} originX={originX}>
         <TransitionGroup component={null}>
           {toasts.map(toast => (
             <CSSTransition key={toast.id} timeout={300} classNames="item">
@@ -112,6 +148,8 @@ Toasts.defaultProps = {
   dismissible: false,
   renderToast: props => <Toast {...props} />,
   type: 'INFO',
+  originY: 'bottom',
+  originX: 'right',
 };
 
 export default Toasts;
