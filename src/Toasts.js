@@ -9,8 +9,6 @@ import { delay } from './utils';
 
 const Container = styled.div`
   position: fixed;
-  max-width: calc(100% - 2rem);
-  padding: 0.5rem;
   bottom: 0;
   right: 0;
   display: flex;
