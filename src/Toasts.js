@@ -1,11 +1,15 @@
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import uuidv4 from 'uuid/v4';
 import Toast from './Toast';
 import { Provider } from './ToastContext';
 import { delay } from './utils';
+import {
+  SUCCESS, ERROR, WARN, INFO,
+} from './constants';
 
 const Container = styled.div`
   pointer-events: none;
@@ -63,7 +67,7 @@ class Toasts extends PureComponent {
     document.body.removeChild(this.el);
   };
 
-  addToast = (text, options) => {
+  showToast = (text, options) => {
     const { autoDismissTimeout, preventAutoDismiss, originY } = this.props;
     const id = uuidv4();
 
@@ -76,13 +80,13 @@ class Toasts extends PureComponent {
     };
 
     if (originY === 'bottom') {
-      this.setState({
-        toasts: [newToast, ...this.state.toasts],
-      });
+      this.setState(prevState => ({
+        toasts: [newToast, ...prevState.toasts],
+      }));
     } else {
-      this.setState({
-        toasts: [...this.state.toasts, newToast],
-      });
+      this.setState(prevState => ({
+        toasts: [...prevState.toasts, newToast],
+      }));
     }
 
     if (!newToast.preventAutoDismiss) {
@@ -131,7 +135,7 @@ class Toasts extends PureComponent {
         <Provider
           value={{
             ...this.state,
-            addToast: this.addToast,
+            showToast: this.showToast,
             dismissToast: this.dismissToast,
           }}
         >
@@ -150,6 +154,17 @@ Toasts.defaultProps = {
   type: 'INFO',
   originY: 'bottom',
   originX: 'right',
+};
+
+Toasts.propTypes = {
+  autoDismissTimeout: PropTypes.number,
+  preventAutoDismiss: PropTypes.bool,
+  dismissible: PropTypes.bool,
+  renderToast: PropTypes.func,
+  type: PropTypes.oneOf([SUCCESS, ERROR, WARN, INFO]),
+  originY: PropTypes.oneOf(['top', 'bottom']),
+  originX: PropTypes.oneOf(['left', 'right']),
+  children: PropTypes.element.isRequired,
 };
 
 export default Toasts;

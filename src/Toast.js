@@ -1,5 +1,9 @@
 import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
+import {
+  SUCCESS, ERROR, WARN, INFO,
+} from './constants';
 
 const dismissibleStyles = css`
   padding-right: 3rem;
@@ -7,19 +11,19 @@ const dismissibleStyles = css`
 
 const toastStyle = type => {
   switch (type) {
-    case 'SUCCESS': {
+    case SUCCESS: {
       return 'lightgreen';
     }
 
-    case 'ERROR': {
+    case ERROR: {
       return 'lightcoral';
     }
 
-    case 'WARN': {
+    case WARN: {
       return 'burlywood';
     }
 
-    case 'INFO': {
+    case INFO: {
       return 'lightslategray;';
     }
 
@@ -72,7 +76,9 @@ const StyledToast = styled.div`
   ${({ dismissible }) => dismissible && dismissibleStyles};
 `;
 
-const Toast = memo(({ text, dismissible, dismissToast, type }) => (
+const Toast = memo(({
+  text, dismissible, dismissToast, type,
+}) => (
   <StyledToast dismissible={dismissible} type={type}>
     <div>{text}</div>
     {dismissible && (
@@ -84,7 +90,16 @@ const Toast = memo(({ text, dismissible, dismissToast, type }) => (
 ));
 
 Toast.defaultProps = {
+  dismissible: false,
+  dismissToast: () => {},
   type: 'INFO',
+};
+
+Toast.propTypes = {
+  text: PropTypes.string.isRequired,
+  dismissible: PropTypes.bool,
+  dismissToast: PropTypes.func,
+  type: PropTypes.oneOf([SUCCESS, ERROR, WARN, INFO]),
 };
 
 export default Toast;

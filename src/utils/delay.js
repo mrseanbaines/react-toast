@@ -1,7 +1,5 @@
-export default (fn, timeout) => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(fn());
-    }, timeout);
-  });
-};
+export default (fn, timeout) => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(fn());
+  }, timeout);
+});
