@@ -16,11 +16,11 @@ const toastStyle = type => {
     }
 
     case 'WARN': {
-      return 'tan';
+      return 'burlywood';
     }
 
     case 'INFO': {
-      return 'lightgrey';
+      return 'lightslategray;';
     }
 
     default: {
@@ -56,8 +56,9 @@ const StyledToast = styled.div`
   border-radius: 0.25rem;
   transition: all 300ms cubic-bezier(0.075, 0.82, 0.165, 1);
   line-height: 1rem;
-  margin: 0.5rem 1rem;
   font-size: 1rem;
+  background: ${({ type }) => toastStyle(type)};
+  margin: 0.5rem 1rem;
 
   :first-child {
     margin-top: 1rem;
@@ -82,8 +83,6 @@ const StyledToast = styled.div`
     opacity: 0;
     transform: translateX(100%);
   }
-
-  background: ${({ type }) => toastStyle(type)};
 `;
 
 const Toast = memo(({ text, dismissible, dismissToast, type }) => (
