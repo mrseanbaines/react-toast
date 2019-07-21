@@ -32,9 +32,8 @@ const toastStyle = type => {
 const CloseBtn = styled.button.attrs({ type: 'button' })`
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
   color: inherit;
   position: absolute;
@@ -42,20 +41,23 @@ const CloseBtn = styled.button.attrs({ type: 'button' })`
   top: 0;
   padding: 1rem;
   line-height: inherit;
+
+  > div {
+    transform: translateY(-0.1em);
+  }
 `;
 
 const StyledToast = styled.div`
   color: white;
-  font-weight: 600;
-  opacity: 1;
   pointer-events: 'auto';
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
   z-index: 1;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.08);
   border-radius: 0.25rem;
   transition: all 300ms cubic-bezier(0.075, 0.82, 0.165, 1);
   line-height: 1rem;
   margin: 0.5rem 1rem;
+  font-size: 1rem;
 
   :first-child {
     margin-top: 1rem;
