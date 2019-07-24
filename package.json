@@ -8,8 +8,10 @@
     "build": "babel src --out-dir lib --minified",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "npm run build",
-    "lint": "eslint './src/*.js' --fix",
-    "lint:check": "eslint './src/*.js'"
+    "lint": "eslint '**/*.js' --fix",
+    "lint:check": "eslint '**/*.js'",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -36,7 +38,12 @@
     "@babel/plugin-proposal-class-properties": "^7.5.0",
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-react": "^7.0.0",
+    "@storybook/addon-actions": "^5.1.9",
+    "@storybook/addon-links": "^5.1.9",
+    "@storybook/addons": "^5.1.9",
+    "@storybook/react": "^5.1.9",
     "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-import": "^2.18.2",

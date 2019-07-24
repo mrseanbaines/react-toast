@@ -8,17 +8,21 @@ import Toast from './Toast';
 import { Provider } from './ToastContext';
 import { delay } from './utils';
 import {
-  SUCCESS, ERROR, WARN, INFO,
+  SUCCESS, ERROR, WARN, INFO, TOP, RIGHT, BOTTOM, LEFT,
 } from './constants';
 
 const Container = styled.div`
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   pointer-events: none;
   position: fixed;
   display: flex;
   flex-direction: column;
 
   ${({ originY, originX }) => css`
-    align-items: ${originX === 'right' ? 'flex-end' : 'flex-start'};
+    align-items: ${originX === RIGHT ? 'flex-end' : 'flex-start'};
 
     ${originY}: 0;
     ${originX}: 0;
@@ -28,11 +32,10 @@ const Container = styled.div`
     pointer-events: auto;
   }
 
-  transition: all 300ms cubic-bezier(0.075, 0.82, 0.165, 1);
-
   .item-exit,
   .item-enter-active,
   .item-enter-done {
+    transition: all 300ms cubic-bezier(0.075, 0.82, 0.165, 1);
     opacity: 1;
     transform: translateX(0);
   }
@@ -40,10 +43,11 @@ const Container = styled.div`
   .item-exit-active,
   .item-exit-done,
   .item-enter {
+    transition: all 300ms cubic-bezier(0.075, 0.82, 0.165, 1);
     opacity: 0;
 
     ${({ originX }) => css`
-      transform: translateX(${originX === 'right' ? '100%' : '-100%'});
+      transform: translateX(${originX === RIGHT ? '100%' : '-100%'});
     `};
   }
 `;
@@ -68,7 +72,10 @@ class Toasts extends PureComponent {
   };
 
   showToast = (text, options) => {
-    const { autoDismissTimeout, preventAutoDismiss, originY } = this.props;
+    const {
+      autoDismissTimeout, preventAutoDismiss, dismissible, type, originY,
+    } = this.props;
+
     const id = uuidv4();
 
     const newToast = {
@@ -76,10 +83,13 @@ class Toasts extends PureComponent {
       text,
       autoDismissTimeout,
       preventAutoDismiss,
+      dismissible,
+      type,
+      dismissToast: () => this.dismissToast(id),
       ...options,
     };
 
-    if (originY === 'bottom') {
+    if (originY === BOTTOM) {
       this.setState(prevState => ({
         toasts: [newToast, ...prevState.toasts],
       }));
@@ -102,12 +112,7 @@ class Toasts extends PureComponent {
 
   render = () => {
     const {
-      dismissible,
-      children,
-      renderToast,
-      type,
-      originY,
-      originX,
+      children, renderToast, originY, originX,
     } = this.props;
     const { toasts } = this.state;
 
@@ -116,12 +121,7 @@ class Toasts extends PureComponent {
         <TransitionGroup component={null}>
           {toasts.map(toast => (
             <CSSTransition key={toast.id} timeout={300} classNames="item">
-              {renderToast({
-                type,
-                dismissible,
-                dismissToast: () => this.dismissToast(toast.id),
-                ...toast,
-              })}
+              {renderToast(toast)}
             </CSSTransition>
           ))}
         </TransitionGroup>
@@ -132,15 +132,7 @@ class Toasts extends PureComponent {
       <>
         {ReactDOM.createPortal(component, this.el)}
 
-        <Provider
-          value={{
-            ...this.state,
-            showToast: this.showToast,
-            dismissToast: this.dismissToast,
-          }}
-        >
-          {children}
-        </Provider>
+        <Provider value={{ toasts, showToast: this.showToast }}>{children}</Provider>
       </>
     );
   };
@@ -151,9 +143,9 @@ Toasts.defaultProps = {
   preventAutoDismiss: false,
   dismissible: false,
   renderToast: props => <Toast {...props} />,
-  type: 'INFO',
-  originY: 'bottom',
-  originX: 'right',
+  type: INFO,
+  originY: BOTTOM,
+  originX: RIGHT,
 };
 
 Toasts.propTypes = {
@@ -162,8 +154,8 @@ Toasts.propTypes = {
   dismissible: PropTypes.bool,
   renderToast: PropTypes.func,
   type: PropTypes.oneOf([SUCCESS, ERROR, WARN, INFO]),
-  originY: PropTypes.oneOf(['top', 'bottom']),
-  originX: PropTypes.oneOf(['left', 'right']),
+  originY: PropTypes.oneOf([TOP, BOTTOM]),
+  originX: PropTypes.oneOf([LEFT, RIGHT]),
   children: PropTypes.element.isRequired,
 };
 

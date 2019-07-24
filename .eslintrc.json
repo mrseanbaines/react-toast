@@ -4,9 +4,7 @@
     "es6": true,
     "node": true
   },
-  "extends": [
-    "airbnb"
-  ],
+  "extends": ["airbnb"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
@@ -19,14 +17,13 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "rules": {
     "react/jsx-filename-extension": "off",
-    "arrow-parens": [
+    "arrow-parens": ["error", "as-needed"],
+    "import/no-extraneous-dependencies": [
       "error",
-      "as-needed"
+      { "devDependencies": ["./stories/**/*.js"] }
     ]
   }
 }
