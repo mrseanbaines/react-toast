@@ -73,13 +73,7 @@ stories.add('with dismiss button', () => (
 ));
 
 stories.add('with custom toast component', () => (
-  <ReactToast
-    renderToast={props => {
-      console.log(props);
-
-      return <MyCustomToast {...props} />;
-    }}
-  >
+  <ReactToast renderToast={props => <MyCustomToast {...props} />}>
     <Button />
   </ReactToast>
 ));
